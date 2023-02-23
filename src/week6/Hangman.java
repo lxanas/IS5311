@@ -50,101 +50,169 @@ public class Hangman
     }
 
     /**
-     Task 2: Write a method that converts a string into an array of char
-     Method name:
-     stringToCharArray
-     Parameter:
-     String s: The target string
-     Return:
-     Type:
-     char[]
-     Value:
-     The char array converted from the given string s argument.
-     On completion of this method:
-     Uncomment the comment block/line right below the comment "-- Calls Task 2 --" in the main method
+     * Task 2: Write a method that converts a string into an array of char
+     * Method name:
+     * stringToCharArray
+     * Parameter:
+     * String s: The target string
+     * Return:
+     * Type:
+     * char[]
+     * Value:
+     * The char array converted from the given string s argument.
+     * On completion of this method:
+     * Uncomment the comment block/line right below the comment "-- Calls Task 2 --" in the main method
      */
     // Put your code for task 2 here
-
+    public static char[] stringToCharArray(String s)
+    {
+        int len = s.length();
+        char[] ca = new char[len];
+        ca = s.toCharArray();
+        return ca;
+    }
 
     /**
-     Task 3: Write a method that counts the number of wrong guesses
-     Method name:
-     getNumWrongs
-     Parameter:
-     char[] wrongs: The array that stores the wrongly guessed letters
-     Return:
-     Type:
-     int
-     Value:
-     The number of wrong guesses
-     On completion:
-     Uncomment the comment block/line right below the comment "-- Calls Task 3 --" in the printScreen method
-     **Hint: Recall that the default initial value of every entry of an array is zero.**
+     * Task 3: Write a method that counts the number of wrong guesses
+     * Method name:
+     * getNumWrongs
+     * Parameter:
+     * char[] wrongs: The array that stores the wrongly guessed letters
+     * Return:
+     * Type:
+     * int
+     * Value:
+     * The number of wrong guesses
+     * On completion:
+     * Uncomment the comment block/line right below the comment "-- Calls Task 3 --" in the printScreen method
+     * *Hint: Recall that the default initial value of every entry of an array is zero.**
      */
     // Put your code for task 3 here
-
+    public static int getNumWrongs(char[] wrongs)
+    {
+        int num = 0;
+        for (char c : wrongs)
+        {
+            num++;
+        }
+        return num;
+    }
 
     /**
-     Task 4: Write a method for checking whether a letter exists in a word.
-     E.g. if the word is baby, then a is in the word, b is in the word,
-     y is in the word, but c is not in the word.
-     Method name:
-     isLetterInWord
-     Parameters (in order):
-     char letter: The target letter
-     char[] word: The word to be checked whether it contains the target letter.
-     Return:
-     Type:
-     boolean
-     Value:
-     true if letter in word,
-     false otherwise
-     On completion of this method:
-     Uncomment the comment block/line right below the comment "-- Calls Task 4 --" in the printScreen method
+     * Task 4: Write a method for checking whether a letter exists in a word.
+     * E.g. if the word is baby, then a is in the word, b is in the word,
+     * y is in the word, but c is not in the word.
+     * Method name:
+     * isLetterInWord
+     * Parameters (in order):
+     * char letter: The target letter
+     * char[] word: The word to be checked whether it contains the target letter.
+     * Return:
+     * Type:
+     * boolean
+     * Value:
+     * true if letter in word,
+     * false otherwise
+     * On completion of this method:
+     * Uncomment the comment block/line right below the comment "-- Calls Task 4 --" in the printScreen method
      */
     // Put your code for task 4 here
-
+    public static boolean isLetterInWord(char letter, char[] word)
+    {
+        boolean flag = false;
+        for (char c : word)
+        {
+            if (c == letter)
+            {
+                flag = true;
+                break;
+            }
+        }
+        return flag;
+    }
 
     /**
-     Task 5: Write a method for checking whether all
-     letters in the secret word be guessed correctly
-     Method name:
-     isWordComplete
-     Parameters:
-     char[] secretWord: The secret word that the player is guessing
-     char[] rights: The correctly guessed letters
-     Return:
-     Type:
-     boolean
-     Value:
-     true if all letters in the secret word be guessed correctly (i.e. exists in the char array rights),
-     false otherwise
+     * Task 5: Write a method for checking whether all
+     * letters in the secret word be guessed correctly
+     * Method name:
+     * isWordComplete
+     * Parameters:
+     * char[] secretWord: The secret word that the player is guessing
+     * char[] rights: The correctly guessed letters
+     * Return:
+     * Type:
+     * boolean
+     * Value:
+     * true if all letters in the secret word be guessed correctly (i.e. exists in the char array rights),
+     * false otherwise
      */
     // Put your code for task 5 here
-
+    public static boolean isWordComplete(char[] secretWord, char[] rights)
+    {
+        int a = secretWord.length, b = rights.length;
+        int min = (a < b ? a : b);
+        boolean flag = true;
+        for (int i = 0; i < min; i++)
+        {
+            if (secretWord[i] != rights[i])
+            {
+                flag = false;
+            }
+        }
+        return flag;
+    }
 
     /**
-     Task 6: Write a method to insert a newly guessed letter into the corresponding array (i.e. rights or wrongs).
-     Recall that:
-     The rights array has no duplicates
-     The wrongs array may contain duplicates
-     Method name:
-     insertGuessToArray
-     Parameters (in order):
-     char guess: The newly guessed letter
-     char[] rights: The array that stores the correctly guessed letters (no duplicate)
-     char[] wrongs: The array that stores the wrongly guessed letters (may contain duplicates)
-     char[] secretWord: The secret word that the player is guessing
-     Return:
-     Type:
-     void
-     On completion of this method:
-     Uncomment the line(s) right below the comment "-- Calls Task 6 --" in the main method
-     IF tasks 7 and 8 are also done, then uncomment the comment block/line right below the comment "-- Calls Task 6, 7 and 8 --" in the main method.
-     **Hint: Recall that the default initial value of every array entry is zero.**
+     * Task 6: Write a method to insert a newly guessed letter into the corresponding array (i.e. rights or wrongs).
+     * Recall that:
+     * The rights array has no duplicates
+     * The wrongs array may contain duplicates
+     * Method name:
+     * insertGuessToArray
+     * Parameters (in order):
+     * char guess: The newly guessed letter
+     * char[] rights: The array that stores the correctly guessed letters (no duplicate)
+     * char[] wrongs: The array that stores the wrongly guessed letters (may contain duplicates)
+     * char[] secretWord: The secret word that the player is guessing
+     * Return:
+     * Type:
+     * void
+     * On completion of this method:
+     * Uncomment the line(s) right below the comment "-- Calls Task 6 --" in the main method
+     * IF tasks 7 and 8 are also done, then uncomment the comment block/line right below the comment "-- Calls Task 6, 7 and 8 --" in the main method.
+     * *Hint: Recall that the default initial value of every array entry is zero.**
      */
     // Put your code for task 6 here
-
+    public static void insertGuessToArray(char guess, char[] rights, char[] wrongs, char[] secretWord)
+    {
+        boolean flag=false;
+        for(char c:secretWord)
+        {
+            if(guess==c) flag=true;
+        }
+        if(flag)
+        {
+            for(int i=0;i<rights.length;i++)
+            {
+                if(rights[i]=='\u0000')
+                {
+                    rights[i]=guess;
+                    break;
+                }
+            }
+        }
+        else
+        {
+            for(int i=0;i<wrongs.length;i++)
+            {
+                if(wrongs[i]=='\u0000')
+                {
+                    wrongs[i]=guess;
+                    break;
+                }
+            }
+        }
+    }
 
     /**
      Task 7: Write a method to determine whether the player wins
@@ -165,7 +233,10 @@ public class Hangman
      Hint: Is there any other method that is equivalent to this method?
      */
     // Put your code for task 7 here
-
+    public static boolean isPlayerWin(char[] secretWord, char[] rights)
+    {
+        return true;
+    }
 
     /**
      Task 8: Write a method to determine whether the player loses
