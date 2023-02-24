@@ -185,29 +185,29 @@ public class Hangman
     // Put your code for task 6 here
     public static void insertGuessToArray(char guess, char[] rights, char[] wrongs, char[] secretWord)
     {
-        boolean flag=false;
-        for(char c:secretWord)
+        boolean flag = false;
+        for (char c : secretWord)
         {
-            if(guess==c) flag=true;
+            if (guess == c) flag = true;
         }
-        if(flag)
+        if (flag)
         {
-            for(int i=0;i<rights.length;i++)
+            for (int i = 0; i < rights.length; i++)
             {
-                if(rights[i]=='\u0000')
+                if (rights[i] == '\u0000')
                 {
-                    rights[i]=guess;
+                    rights[i] = guess;
                     break;
                 }
             }
         }
         else
         {
-            for(int i=0;i<wrongs.length;i++)
+            for (int i = 0; i < wrongs.length; i++)
             {
-                if(wrongs[i]=='\u0000')
+                if (wrongs[i] == '\u0000')
                 {
-                    wrongs[i]=guess;
+                    wrongs[i] = guess;
                     break;
                 }
             }
@@ -215,47 +215,79 @@ public class Hangman
     }
 
     /**
-     Task 7: Write a method to determine whether the player wins
-     Method name:
-     isPlayerWin
-     Parameters:
-     char[] secretWord: The secret word that the player is guessing
-     char[] rights: The letters that are guessed correctly
-     Return:
-     Type:
-     boolean
-     Value:
-     true if all letters in the secret word are correctly guessed,
-     false otherwise
-     On completion:
-     Uncomment the line(s) right below the comment "-- Calls Task 7 --" in the main method
-     IF tasks 6 and 8 are also done, then uncomment the comment block/line right below the comment "-- Calls Task 6, 7 and 8 --" in the main method.
-     Hint: Is there any other method that is equivalent to this method?
+     * Task 7: Write a method to determine whether the player wins
+     * Method name:
+     * isPlayerWin
+     * Parameters:
+     * char[] secretWord: The secret word that the player is guessing
+     * char[] rights: The letters that are guessed correctly
+     * Return:
+     * Type:
+     * boolean
+     * Value:
+     * true if all letters in the secret word are correctly guessed,
+     * false otherwise
+     * On completion:
+     * Uncomment the line(s) right below the comment "-- Calls Task 7 --" in the main method
+     * IF tasks 6 and 8 are also done, then uncomment the comment block/line right below the comment "-- Calls Task 6, 7 and 8 --" in the main method.
+     * Hint: Is there any other method that is equivalent to this method?
      */
     // Put your code for task 7 here
     public static boolean isPlayerWin(char[] secretWord, char[] rights)
     {
-        return true;
+        boolean flag1 = false, flag2 = false;
+        for (char c : secretWord)
+        {
+            flag1 = false;
+            for (int i = 0; rights[i] != '\u0000'; i++)
+            {
+                char c1 = rights[i];
+
+                if (c1 == c)
+                {
+                    flag1 = true;
+                }
+            }
+            if (flag1 == true)
+            {
+                flag2 = true;
+            }
+            else
+            {
+                flag2 = false;
+                break;
+            }
+        }
+        return flag2;
     }
 
     /**
-     Task 8: Write a method to determine whether the player loses
-     Method name:
-     isPlayerLose
-     Parameters:
-     char[] wrongs: The letters that are guessed incorrectly
-     Return:
-     Type:
-     boolean
-     Value:
-     true if the number of incorrectly guessed letters is at least 6
-     false otherwise
-     On completion:
-     IF tasks 6 and 7 are also done, then uncomment the comment block/line right below the comment "-- Calls Task 6, 7 and 8 --" in the main method.
-
+     * Task 8: Write a method to determine whether the player loses
+     * Method name:
+     * isPlayerLose
+     * Parameters:
+     * char[] wrongs: The letters that are guessed incorrectly
+     * Return:
+     * Type:
+     * boolean
+     * Value:
+     * true if the number of incorrectly guessed letters is at least 6
+     * false otherwise
+     * On completion:
+     * IF tasks 6 and 7 are also done, then uncomment the comment block/line right below the comment "-- Calls Task 6, 7 and 8 --" in the main method.
      */
     // Put your code for task 8 here
-
+    public static boolean isPlayerLose(char[] wrongs)
+    {
+        int sum = 0;
+        for (int i = 0; wrongs[i] != '\u0000'; i++)
+        {
+            sum++;
+        }
+        if (sum >= 6)
+            return true;
+        else return false;
+    }
 
     /**
      * This function prints the hangman based on the number of wrong guesses the
@@ -321,7 +353,7 @@ public class Hangman
 
         // Print the hangman
         // -- Calls Task 3 --
-        //printHangman(getNumWrongs(wrongs));
+        printHangman(getNumWrongs(wrongs));
 
         // Print the correct and wrong guesses so far
         System.out.print("Correct guesses: ");
@@ -336,12 +368,12 @@ public class Hangman
         for (int i = 0; i < secretWord.length; i++)
         {
             // -- Calls Task 4 --
-			/*
-			if (isLetterInWord(secretWord[i], rights))
-				System.out.print(secretWord[i] + " ");
-			else
-				System.out.print("_ ");
-			*/
+
+            if (isLetterInWord(secretWord[i], rights))
+                System.out.print(secretWord[i] + " ");
+            else
+                System.out.print("_ ");
+
         }
         System.out.println("\n");
     }
@@ -375,45 +407,49 @@ public class Hangman
         Random rand = new Random();
 
         // Create file descriptor of the word list file
-        File wordListFile = new File("word-list.txt");
+        File wordListFile = new File("/Users/lixiang/IdeaProjects/IS5311/src/week6/word-list.txt");
 
         // Get the word list from the file
         // -- Calls Task 1 --
-        //wordList = readWordListFile(wordListFile);
+        wordList = readWordListFile(wordListFile);
 
         // Randomly generate an index of a word of the word list
         int secretWordIndex = rand.nextInt(wordList.length);
 
         // Convert the secret word string into char[]
         // -- Calls Task 2 --
-        //secretWord = stringToCharArray(wordList[secretWordIndex]);
+        secretWord = stringToCharArray(wordList[secretWordIndex]);
 
         // Repeatedly ask the user to input a letter until the game ends.
         // -- Calls Task 6, 7 and 8 --
-		/*
-		while (!isPlayerWin(secretWord, rights) && !isPlayerLose(wrongs)) {
-			// Print the hangman screen
-			printScreen(rights, wrongs, secretWord);
 
-			// Ask for the guess
-			System.out.print("\nPlease enter your guess: ");
-			guess = keyboard.nextLine().charAt(0);
+        while (!isPlayerWin(secretWord, rights) && !isPlayerLose(wrongs))
+        {
+            // Print the hangman screen
+            printScreen(rights, wrongs, secretWord);
 
-			insertGuessToArray(guess, rights, wrongs, secretWord);
-		}
-		*/
+            // Ask for the guess
+            System.out.print("\nPlease enter your guess: ");
+            guess = keyboard.nextLine().charAt(0);
+
+            insertGuessToArray(guess, rights, wrongs, secretWord);
+        }
+
 
         // Print the final hangman screen
         printScreen(rights, wrongs, secretWord);
 
         // -- Calls Task 7 --
-		/*
-		if (isPlayerWin(secretWord, rights)) {
-			System.out.print("You have won!\n");
-		} else {
-			System.out.print("You have lost!\n");
-		}
-		*/
+
+        if (isPlayerWin(secretWord, rights))
+        {
+            System.out.print("You have won!\n");
+        }
+        else
+        {
+            System.out.print("You have lost!\n");
+        }
+
     }
 }
 
