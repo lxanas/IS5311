@@ -102,6 +102,7 @@ class Course
     public Course(String _courseCode)
     {
         this.courseCode = _courseCode;
+        numEnrollments = 0;
     }
 
     public static int getNumCourses()
@@ -123,6 +124,7 @@ class Course
     {
         numCourses++;
     }
+
     public void setCourseCode(String _courseCode)
     {
         this.courseCode = _courseCode;
@@ -141,8 +143,7 @@ class Student
 
     public Student()
     {
-        stuName= String.valueOf('\u0000');
-        stuId=String.valueOf('\u0000');
+
     }
 
     public Student(String _stuName)
@@ -150,7 +151,6 @@ class Student
         if (_stuName.length() >= 3)
         {
             this.stuName = _stuName;
-            stuId=String.valueOf('\u0000');
         }
         else
         {
@@ -186,7 +186,7 @@ class Student
 
     public String getStuName()
     {
-        if (stuName.length() >= 3)
+        if (stuName != null && stuName.length() >= 3)
             return stuName;
         else
             return "**Invalid name**";
@@ -194,12 +194,20 @@ class Student
 
     public void setStuName(String _stuName)
     {
-        this.stuName = _stuName;
+        if (_stuName.length() >= 3)
+        {
+            this.stuName = _stuName;
+        }
+        else
+        {
+            System.out.println("Invalid student name");
+        }
     }
 
     public String getStuId()
     {
-        if (stuId.length() == 8)
+
+        if (stuId != null && stuId.length() == 8)
             return stuId;
         else
             return "**Invalid id**";
@@ -207,14 +215,25 @@ class Student
 
     public void setStuId(String _stuId)
     {
-        this.stuId = _stuId;
+        if (_stuId.length() == 8)
+        {
+            this.stuId = _stuId;
+        }
+        else
+        {
+            System.out.println("Invalid student id");
+        }
     }
 
     public void enroll(Course course)
     {
-        if(stuId.length()==8&&stuName.length()>=3)
+        if (stuId != null && stuName != null)
         {
-            Course.addNumCourse();
+            if (stuId.length() == 8 && stuName.length() >= 3)
+                Course.addNumCourse();
+            else
+                System.out.println("Student information is invalid, cannot enroll the course");
+
         }
         else
         {
