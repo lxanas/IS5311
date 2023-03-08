@@ -1,10 +1,13 @@
-package week8;// An abstract class Account
+package week8;
+// An abstract class Account
 // This is abstract because we 
 // have no idea how to print the
 // menu and perform login authetication
 // before knowing which type of account is.
 
 import java.io.*;
+
+import static week8.Global.keyboard;
 
 public abstract class Account
 {
@@ -23,6 +26,7 @@ public abstract class Account
      * named performAction which takes an int parameter and
      * returns a boolean.
      *****************************/
+    public abstract boolean performAction(int actionNum);
 
 
     /*****************************
@@ -30,6 +34,7 @@ public abstract class Account
      * Add your code here to define an abstract method
      * named login which returns a boolean.
      *****************************/
+    public abstract boolean login();
 
 
     // A method that asks the user to input an action number,
@@ -45,8 +50,9 @@ public abstract class Account
          * and return it.
          * --REMOVE THE return 1; BELOW WHEN YOU WORK ON THIS METHOD--
          ****************************/
-
-        return 1;
+        System.out.println("Select an action: ");
+        int action = Integer.parseInt(keyboard.nextLine());
+        return action;
     }
 
     // A method that asks the user input the username and password
@@ -63,9 +69,12 @@ public abstract class Account
          * the user inputs.
          * --REMOVE THE return null; BELOW WHEN YOU IMPLEMENT THIS METHOD--
          *****************************/
-
-
-        return null;
+        System.out.println("Enter your username: ");
+        String username = keyboard.nextLine();
+        System.out.println("Enter your password: ");
+        String password = keyboard.nextLine();
+        Credential credential = new Credential(username, password);
+        return credential;
     }
 
 
