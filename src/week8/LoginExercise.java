@@ -36,12 +36,12 @@ public class LoginExercise {
 		
 		// Repeat ask the user login until the 
 		// user login success.
-//		while (!account.login()) {
-//			System.out.println("Invalid username or password. Please try again.");
-//		}
-//
-//		// Let the logged in account to start the use of the system.
-//		account.start();
+		while (!account.login()) {
+			System.out.println("Invalid username or password. Please try again.");
+		}
+
+		// Let the logged in account to start the use of the system.
+		account.start();
 
 	}
 }

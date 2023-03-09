@@ -1,5 +1,6 @@
 package week8;
 
+import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.io.File;
 import java.io.IOException;
@@ -78,6 +79,27 @@ public class NormalUser extends Account
      * If no account in account.txt file that matches the user input,
      * then return false.
      ****************************/
+    @Override
+    public boolean login() throws FileNotFoundException
+    {
+        Credential cred = enterUsernamePwd();
+        File file = new File("/Users/lixiang/IdeaProjects/IS5311/src/week8/accounts.txt");
+        Scanner sc = new Scanner(file);
+        while (sc.hasNextLine())
+        {
+            String username = sc.nextLine();
+            String password = sc.nextLine();
+            String[] accInfo = sc.nextLine().split(",");
+            if (cred.getUsername().equals(username) && cred.getPassword().equals(password))
+            {
+                setAccInfo(username, accInfo);
+                sc.close();
+                return true;
+            }
+        }
+        sc.close();
+        return false;
+    }
 
 
     // A method that prints the Normal User action menu.
@@ -98,6 +120,6 @@ public class NormalUser extends Account
     {
         String[] accInfo = accInfoLine.split(",");
         setAccInfo(username, accInfo);
-//		regDate = accInfo[3];
+		registerDate = accInfo[3];
     }
 }

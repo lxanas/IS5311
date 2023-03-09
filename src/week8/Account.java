@@ -34,7 +34,7 @@ public abstract class Account
      * Add your code here to define an abstract method
      * named login which returns a boolean.
      *****************************/
-    public abstract boolean login();
+    public abstract boolean login() throws FileNotFoundException;
 
 
     // A method that asks the user to input an action number,
@@ -93,6 +93,16 @@ public abstract class Account
      * "Invalid action number, please try again." and ask the user input again.
      * Repeat this until an action is performed (performAction returns true).
      ****************************/
+    public void start() throws FileNotFoundException
+    {
+        printMenu();
+        int action = promptForAction();
+        while (!performAction(action))
+        {
+            System.out.println("Invalid action number, please try again.");
+            action = promptForAction();
+        }
+    }
 
 
     // A method that prints the basic info of the user account.
