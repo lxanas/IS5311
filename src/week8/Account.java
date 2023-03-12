@@ -1,6 +1,6 @@
 package week8;
 // An abstract class Account
-// This is abstract because we 
+// This is abstract because we
 // have no idea how to print the
 // menu and perform login authetication
 // before knowing which type of account is.
@@ -93,7 +93,7 @@ public abstract class Account
      * "Invalid action number, please try again." and ask the user input again.
      * Repeat this until an action is performed (performAction returns true).
      ****************************/
-    public void start() throws FileNotFoundException
+    public void start()
     {
         printMenu();
         int action = promptForAction();
@@ -103,7 +103,6 @@ public abstract class Account
             action = promptForAction();
         }
     }
-
 
     // A method that prints the basic info of the user account.
     public void printAccInfo()
