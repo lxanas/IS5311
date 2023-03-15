@@ -83,7 +83,7 @@ public class NormalUser extends Account
     public boolean login() throws FileNotFoundException
     {
         Credential cred = enterUsernamePwd();
-        File file = new File("/Users/lixiang/IdeaProjects/IS5311/src/week8/accounts.txt");
+        File file = new File("C:\\Users\\lxanas\\Desktop\\DS_Practice\\IS5311\\src\\week8\\accounts.txt");
         Scanner sc = new Scanner(file);
         while (sc.hasNextLine())
         {
