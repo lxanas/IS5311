@@ -80,12 +80,70 @@ public class Graph
     public static void main(String[] args) throws FileNotFoundException
     {
         Graph g = new Graph("/Users/lixiang/IdeaProjects/IS5311/src/project/graph.txt");
+        g.findSpanningTree(0);
         System.out.println("hello");
     }
 
+    /*Let currG denote the current graph.
+
+Initialization(root) {
+    // A spanning tree is also a graph.
+    // We keep adding necessary vertices and edges to an initially empty graph for constructing the spanning tree.
+    Create an empty graph G (i.e. no vertex and edge in G).
+    Add root to G.
+    Call buildSpanningTreeRecur(G, root);
+    For every vertex v in currG:
+        if v does not in G, report the currG is not connected if necessary.
+    report the spanning tree G if necessary.
+}
+
+buildSpanningTreeRecur(G, u) {
+    Get the neighbor list of u in currG.
+    For each neighbor vertex v of u according to the ORDER of the neighbor list of u {
+        if v does not in G {
+            add the edge (u, v) to G (vertex v will be also be added to G).
+            Call buildSpanningTreeRecur(G, v);
+        } else if (u, v) is not an edge in G {
+            report there is a cycle if necessary.
+        }
+    }
+}*/
     public void findSpanningTree(int root)
     {
+        List<List<Integer>> G = new ArrayList<>();
+        for (int i = 0; i < V; i++)
+        {
+            G.add(new ArrayList<>());
+        }
+        // Add the root vertex to G.
+        G.get(root).add(-1); // use -1 to represent a dummy parent for the root
+        // Build the spanning tree recursively.
+        buildSpanningTreeRecur(G, root);
+        // Check if every vertex is in G to ensure connectivity.
+        for (int i = 0; i < V; i++)
+        {
+            if (i != root && G.get(i).isEmpty())
+            {
+                System.out.println("The graph is not connected.");
+                return;
+            }
+        }
+        // Report the spanning tree.
+        System.out.println("The spanning tree is:");
+        for (int u = 0; u < V; u++)
+        {
+            for (int v : G.get(u))
+            {
+                if (v != -1)
+                {
+                    System.out.println(u + " - " + v);
+                }
+            }
+        }
+    }
 
+    private void buildSpanningTreeRecur(List<List<Integer>> G, int root)
+    {
     }
 }
 
