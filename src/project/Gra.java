@@ -7,27 +7,27 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Scanner;
 
-public class Graph1
+public class Gra
 {
     private int V;
     private HashMap<Integer, ArrayList<Integer>> adj;
     private HashSet<Integer> visited;
 
-    public Graph1()
+    public Gra()
     {
         V = 0;
         adj = new HashMap<>();
         visited = new HashSet<>();
     }
 
-    public Graph1(int V)
+    public Gra(int V)
     {
         this.V = V;
         adj = new HashMap<>();
         visited = new HashSet<>();
     }
 
-    public Graph1(String filename) throws FileNotFoundException
+    public Gra(String filename) throws FileNotFoundException
     {
         visited = new HashSet<>();
         V = 0;
@@ -70,6 +70,11 @@ public class Graph1
             adj.put(u, new ArrayList<>());
         }
         adj.get(u).add(v);
+        if (!adj.containsKey(v))
+        {
+            adj.put(v, new ArrayList<>());
+        }
+        adj.get(v).add(u);
     }
 
     public int getV()
@@ -87,11 +92,40 @@ public class Graph1
         return E / 2;
     }
 
+    public Gra findSpanningTree(int root)
+    {
+        Gra spanningTree = new Gra(V);
+        buildSpanningTreeRecur(spanningTree, root);
+        for (int u : adj.keySet())
+        {
+            if (!spanningTree.visited.contains(u))
+            {
+                System.out.println("The current graph is not connected.");
+                return null;
+            }
+        }
+        return spanningTree;
+    }
+
+    private void buildSpanningTreeRecur(Gra g, int root)
+    {
+        visited.add(root);
+        for(int v : adj.get(root))
+        {
+            if(!visited.contains(v))
+            {
+                g.addEdge(root, v);
+                buildSpanningTreeRecur(g, v);
+            }
+
+        }
+
+    }
 
 
     public static void main(String[] args) throws FileNotFoundException
     {
-        Graph1 g = new Graph1("/Users/lixiang/IdeaProjects/IS5311/src/project/graph.txt");
+        Gra g = new Gra("/Users/lixiang/IdeaProjects/IS5311/src/project/graph.txt");
 
         System.out.println("hello");
     }

@@ -90,6 +90,14 @@ public class Graph
 
     public void addEdge(int u, int v)
     {
+        if(!adj.contains(u))
+        {
+            adj.add(u, new ArrayList<>());
+        }
+        if(!adj.contains(v))
+        {
+            adj.add(v, new ArrayList<>());
+        }
         adj.get(u).add(v);
         adj.get(v).add(u);
     }
