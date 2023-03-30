@@ -88,6 +88,12 @@ public class Graph
         return adj.get(v);
     }
 
+    public void addEdge(int u, int v)
+    {
+        adj.get(u).add(v);
+        adj.get(v).add(u);
+    }
+
 
     public static void main(String[] args) throws FileNotFoundException
     {
@@ -97,11 +103,6 @@ public class Graph
         System.out.println("hello");
     }
 
-    public void addEdge(int u, int v)
-    {
-        adj.get(u).add(v);
-        adj.get(v).add(u);
-    }
 
     public Graph findSpanningTree(int root)
     {
