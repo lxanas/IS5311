@@ -98,7 +98,7 @@ public class Gra
         buildSpanningTreeRecur(spanningTree, root);
         for (int u : adj.keySet())
         {
-            if (!spanningTree.visited.contains(u))
+            if (spanningTree.adj.get(u) == null)
             {
                 System.out.println("The current graph is not connected.");
                 return null;
@@ -109,24 +109,25 @@ public class Gra
 
     private void buildSpanningTreeRecur(Gra g, int root)
     {
-        visited.add(root);
-        for(int v : adj.get(root))
+        for (int v : adj.get(root))
         {
-            if(!visited.contains(v))
+            if (!g.adj.containsKey(v))
             {
                 g.addEdge(root, v);
                 buildSpanningTreeRecur(g, v);
             }
-
+            else if (!g.adj.get(root).contains(v))
+            {
+                System.out.println("There is a cycle.");
+            }
         }
-
     }
 
 
     public static void main(String[] args) throws FileNotFoundException
     {
         Gra g = new Gra("/Users/lixiang/IdeaProjects/IS5311/src/project/graph.txt");
-
+        Gra tree = g.findSpanningTree(1);
         System.out.println("hello");
     }
 }
