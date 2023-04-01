@@ -1,16 +1,38 @@
 package project;
 
 import java.io.File;
-import java.io.FileNotFoundException;
+
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.*;
 
 public class Graph
 {
     private int V;
-    private List<List<Integer>> adj;
-    private Set<Integer> visited;
+    private HashMap<Integer, ArrayList<Integer>> adj;
+    private HashSet<Integer> visited;
 
-    public Graph(String filename) throws FileNotFoundException
+    private boolean flag = false;
+
+    private boolean cycle = false;
+
+    private boolean connected = true;
+
+    public Graph()
+    {
+        V = 0;
+        adj = new HashMap<>();
+        visited = new HashSet<>();
+    }
+
+    public Graph(int V)
+    {
+        this.V = V;
+        adj = new HashMap<>();
+        visited = new HashSet<>();
+    }
+
+    public Graph(String filename) throws Exception
     {
         visited = new HashSet<>();
         V = 0;
@@ -28,44 +50,41 @@ public class Graph
             }
         }
         in.close();
-        adj = new ArrayList<>(max);
-        for (int i = 0; i < V; i++)
-        {
-            adj.add(new ArrayList<>());
-        }
+        adj = new HashMap<>(max);
         in = new Scanner(file);
         int u = 0;
         while (in.hasNextLine())
         {
             String[] parts = in.nextLine().split(": ");
-//            System.out.println(parts[0]);
-            u = Integer.parseInt(parts[0].trim()) - 1;
+            u = Integer.parseInt(parts[0].trim());
+            adj.put(u, new ArrayList<>());
             String[] neighbors = parts[1].split(", ");
             for (String neighbor : neighbors)
             {
-                int v = Integer.parseInt(neighbor) - 1;
+                int v = Integer.parseInt(neighbor);
                 adj.get(u).add(v);
             }
         }
         in.close();
     }
 
-    public Graph()
+    public void addEdge(int u, int v)
     {
-        V = 0;
-        adj = new ArrayList<>();
-        visited = new HashSet<>();
-    }
-
-    public Graph(int V)
-    {
-        this.V = V;
-        adj = new ArrayList<>(V);
-        for (int i = 0; i < V; i++)
+        if (!adj.containsKey(u))
         {
-            adj.add(new ArrayList<>());
+            adj.put(u, new ArrayList<>());
         }
-        visited = new HashSet<>();
+        if (adj.get(u).contains(v))
+        {
+            return;
+        }
+        adj.get(u).add(v);
+        if (!adj.containsKey(v))
+        {
+            adj.put(v, new ArrayList<>());
+        }
+        adj.get(v).add(u);
+        flag = true;
     }
 
     public int getV()
@@ -76,128 +95,259 @@ public class Graph
     public int getE()
     {
         int E = 0;
-        for (int i = 0; i < V; i++)
+        for (int u : adj.keySet())
         {
-            E += adj.get(i).size();
+            E += adj.get(u).size();
         }
         return E / 2;
     }
-
-    public List<Integer> getAdj(int v)
-    {
-        return adj.get(v);
-    }
-
-    public void addEdge(int u, int v)
-    {
-        if(!adj.contains(u))
-        {
-            adj.add(u, new ArrayList<>());
-        }
-        if(!adj.contains(v))
-        {
-            adj.add(v, new ArrayList<>());
-        }
-        adj.get(u).add(v);
-        adj.get(v).add(u);
-    }
-
-
-    public static void main(String[] args) throws FileNotFoundException
-    {
-        Graph g = new Graph("/Users/lixiang/IdeaProjects/IS5311/src/project/graph.txt");
-        Graph tree = g.findSpanningTree(1);
-        tree.printAdjacencyList();
-        System.out.println("hello");
-    }
-
 
     public Graph findSpanningTree(int root)
     {
         Graph spanningTree = new Graph(V);
         buildSpanningTreeRecur(spanningTree, root);
-
-        for (int v = 0; v < V; v++)
+        for (int u : adj.keySet())
         {
-            if (!spanningTree.visited.contains(v))
+            if (spanningTree.adj.get(u) == null)
             {
-                System.out.println("The current graph is not connected.");
+                this.connected = false;
                 return null;
             }
         }
         return spanningTree;
     }
 
-    private void buildSpanningTreeRecur(Graph G, int u)
-    {
-        visited.add(u);
-        G.visited.add(u);
 
-        for (int v : adj.get(u))
+    private void buildSpanningTreeRecur(Graph g, int root)
+    {
+        for (int v : adj.get(root))
         {
-            if (!G.visited.contains(v))
+            if (!g.adj.containsKey(v))
             {
-                G.addEdge(u, v);
-                buildSpanningTreeRecur(G, v);
+                g.addEdge(root, v);
+                buildSpanningTreeRecur(g, v);
             }
-            else if (!G.adj.get(u).contains(v))
+            else if (!g.adj.get(root).contains(v))
             {
-                System.out.println("There is a cycle.");
+                this.cycle = true;
             }
         }
     }
 
-    public void printAdjacencyList()
+    private void isCycle() throws Exception
     {
-        for (int i = 0; i < V; i++)
+        if (this.cycle)
         {
-            List<Integer> neighbors = adj.get(i);
-            System.out.print("Vertex " + i + ":");
-            for (int v : neighbors)
+            System.out.println("Yes");
+        }
+        else
+        {
+            System.out.println("No");
+        }
+        chooseAction(this);
+    }
+
+    private void isConnected() throws Exception
+    {
+        if (this.connected)
+        {
+            System.out.println("Yes");
+        }
+        else
+        {
+            System.out.println("No");
+        }
+        chooseAction(this);
+    }
+
+    private void printGraph() throws Exception
+    {
+        ArrayList<Integer> list = new ArrayList<>(adj.keySet());
+        Collections.sort(list);
+        for (int u : list)
+        {
+            System.out.print(u + ": ");
+            ArrayList<Integer> neighbors = adj.get(u);
+            int n = neighbors.size();
+            for (int i = 0; i < n; i++)
             {
-                System.out.print(" -> " + v);
+                int v = neighbors.get(i);
+                System.out.print(v);
+                if (i < n - 1)
+                {
+                    System.out.print(", ");
+                }
             }
             System.out.println();
         }
+        chooseAction(this);
     }
 
-//    public void findSpanningTree(int root)
-//    {
-//        List<List<Integer>> G = new ArrayList<>();
-//        for (int i = 0; i < V; i++)
-//        {
-//            G.add(new ArrayList<>());
-//        }
-//        // Add the root vertex to G.
-//        G.get(root).add(-1); // use -1 to represent a dummy parent for the root
-//        // Build the spanning tree recursively.
-//        buildSpanningTreeRecur(G, root);
-//        // Check if every vertex is in G to ensure connectivity.
-//        for (int i = 0; i < V; i++)
-//        {
-//            if (i != root && G.get(i).isEmpty())
-//            {
-//                System.out.println("The graph is not connected.");
-//                return;
-//            }
-//        }
-//        // Report the spanning tree.
-//        System.out.println("The spanning tree is:");
-//        for (int u = 0; u < V; u++)
-//        {
-//            for (int v : G.get(u))
-//            {
-//                if (v != -1)
-//                {
-//                    System.out.println(u + " - " + v);
-//                }
-//            }
-//        }
-//    }
-//
-//    private void buildSpanningTreeRecur(List<List<Integer>> G, int root)
-//    {
-//
-//    }
-}
+    private void saveGraph(String filename) throws IOException
+    {
+        File file = new File(filename);
+        if (!file.exists())
+        {
+            file.createNewFile();
+        }
+        PrintWriter out = new PrintWriter(file);
+        ArrayList<Integer> list = new ArrayList<>(adj.keySet());
+        Collections.sort(list);
+        for (int u : list)
+        {
+            out.print(u + ": ");
+            ArrayList<Integer> neighbors = adj.get(u);
+            int n = neighbors.size();
+            for (int i = 0; i < n; i++)
+            {
+                int v = neighbors.get(i);
+                out.print(v);
+                if (i < n - 1)
+                {
+                    out.print(", ");
+                }
+            }
+            out.println();
+        }
+        out.close();
+    }
 
+    public static void printMenu()
+    {
+        System.out.println(" ");
+        System.out.println("Action Menu:");
+        System.out.println("1. Load the graph from graph.txt");
+        System.out.println("2. Find a spanning tree of the current graph with a specified root");
+        System.out.println("3. Is the current graph cotains cycle?");
+        System.out.println("4. Is the current graph connected?");
+        System.out.println("5. Add an edge to the current graph.");
+        System.out.println("6. Print the adjacency list of the current graph.");
+        System.out.println("7. Save the adjacency list of the current graph.");
+        System.out.println("8. Exit");
+        System.out.println(" ");
+    }
+
+    public static void exit()
+    {
+        System.out.println("Bye bye!");
+        System.exit(0);
+    }
+
+    public void addEdge() throws Exception
+    {
+        System.out.print("Enter the first endpoint: ");
+        Scanner input = new Scanner(System.in);
+        int u = Integer.parseInt(input.nextLine());
+        System.out.print("Enter the second endpoint: ");
+        int v = Integer.parseInt(input.nextLine());
+        addEdge(u, v);
+        if (flag)
+            System.out.println("New edge is added successfully");
+        else
+        {
+            System.out.println("Edge already exists.");
+        }
+        flag = false;
+        findSpanningTree(this.adj.keySet().iterator().next());
+        chooseAction(this);
+    }
+
+    public static void chooseAction(Graph g) throws Exception
+    {
+        printMenu();
+        System.out.printf("Please specify an action: ");
+        Scanner input = new Scanner(System.in);
+        String choice = input.nextLine();
+        switch (choice)
+        {
+            case "1":
+                load();
+                break;
+            case "2":
+                g.findSpanningTree();
+                break;
+            case "3":
+                g.isCycle();
+                break;
+            case "4":
+                g.isConnected();
+                break;
+            case "5":
+                g.addEdge();
+                break;
+            case "6":
+                g.printGraph();
+                break;
+            case "7":
+                g.saveGraph();
+                break;
+            case "8":
+                exit();
+                break;
+            default:
+                System.out.println("Invalid action.");
+                chooseAction(g);
+                break;
+        }
+    }
+
+    public void findSpanningTree() throws Exception
+    {
+        if (this.adj.isEmpty())
+        {
+            System.out.println("The graph is not loaded yet.");
+            chooseAction(this);
+            return;
+        }
+        System.out.print("Please specify a root: ");
+        Scanner input = new Scanner(System.in);
+        int root = Integer.parseInt(input.nextLine());
+        Graph a = findSpanningTree(root);
+        if (a == null)
+        {
+            System.out.println("Spanning tree cannot be found because the graph is not connected.");
+        }
+        else
+        {
+            a.printGraph();
+        }
+        chooseAction(this);
+    }
+
+    public void saveGraph() throws Exception
+    {
+        System.out.print("Where to save the adjacency list of the current graph? ");
+        Scanner input = new Scanner(System.in);
+        String filename = input.nextLine();
+        saveGraph(filename);
+        System.out.println("The adjacency list is successfully saved to the specified file.");
+        chooseAction(this);
+    }
+
+    public static void load() throws Exception
+    {
+        try
+        {
+            String filepath = "graph.txt";
+            Graph g = new Graph(filepath);
+            int v = g.getV();
+            int e = g.getE();
+            System.out.println("#vertex: " + v + " #edge: " + e);
+            g.findSpanningTree(g.adj.keySet().iterator().next());
+            chooseAction(g);
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+            Graph g = new Graph();
+            chooseAction(g);
+        }
+    }
+
+
+    public static void main(String[] args) throws Exception
+    {
+        System.out.println("Welcome to this social network analysis system.");
+        Graph g = new Graph();
+        chooseAction(g);
+    }
+}
