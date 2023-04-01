@@ -1,12 +1,10 @@
-package project;
-
 import java.io.File;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
 
-public class Graph
+public class IndividualProject
 {
     private int V;
     private HashMap<Integer, ArrayList<Integer>> adj;
@@ -18,21 +16,21 @@ public class Graph
 
     private boolean connected = true;
 
-    public Graph()
+    public IndividualProject()
     {
         V = 0;
         adj = new HashMap<>();
         visited = new HashSet<>();
     }
 
-    public Graph(int V)
+    public IndividualProject(int V)
     {
         this.V = V;
         adj = new HashMap<>();
         visited = new HashSet<>();
     }
 
-    public Graph(String filename) throws Exception
+    public IndividualProject(String filename) throws Exception
     {
         visited = new HashSet<>();
         V = 0;
@@ -102,9 +100,9 @@ public class Graph
         return E / 2;
     }
 
-    public Graph findSpanningTree(int root)
+    public IndividualProject findSpanningTree(int root)
     {
-        Graph spanningTree = new Graph(V);
+        IndividualProject spanningTree = new IndividualProject(V);
         buildSpanningTreeRecur(spanningTree, root);
         for (int u : adj.keySet())
         {
@@ -118,7 +116,7 @@ public class Graph
     }
 
 
-    private void buildSpanningTreeRecur(Graph g, int root)
+    private void buildSpanningTreeRecur(IndividualProject g, int root)
     {
         for (int v : adj.get(root))
         {
@@ -136,6 +134,12 @@ public class Graph
 
     private void isCycle() throws Exception
     {
+        if (this.adj.isEmpty())
+        {
+            System.out.println("The graph is not loaded yet.");
+            chooseAction(this);
+            return;
+        }
         if (this.cycle)
         {
             System.out.println("Yes");
@@ -149,6 +153,12 @@ public class Graph
 
     private void isConnected() throws Exception
     {
+        if (this.adj.isEmpty())
+        {
+            System.out.println("The graph is not loaded yet.");
+            chooseAction(this);
+            return;
+        }
         if (this.connected)
         {
             System.out.println("Yes");
@@ -162,6 +172,12 @@ public class Graph
 
     private void printGraph() throws Exception
     {
+        if (this.adj.isEmpty())
+        {
+            System.out.println("The graph is not loaded yet.");
+            chooseAction(this);
+            return;
+        }
         ArrayList<Integer> list = new ArrayList<>(adj.keySet());
         Collections.sort(list);
         for (int u : list)
@@ -181,6 +197,28 @@ public class Graph
             System.out.println();
         }
         chooseAction(this);
+    }
+
+    private void printGraph(IndividualProject g) throws Exception
+    {
+        ArrayList<Integer> list = new ArrayList<>(g.adj.keySet());
+        Collections.sort(list);
+        for (int u : list)
+        {
+            System.out.print(u + ": ");
+            ArrayList<Integer> neighbors = adj.get(u);
+            int n = neighbors.size();
+            for (int i = 0; i < n; i++)
+            {
+                int v = neighbors.get(i);
+                System.out.print(v);
+                if (i < n - 1)
+                {
+                    System.out.print(", ");
+                }
+            }
+            System.out.println();
+        }
     }
 
     private void saveGraph(String filename) throws IOException
@@ -235,6 +273,12 @@ public class Graph
 
     public void addEdge() throws Exception
     {
+        if (this.adj.isEmpty())
+        {
+            System.out.println("The graph is not loaded yet.");
+            chooseAction(this);
+            return;
+        }
         System.out.print("Enter the first endpoint: ");
         Scanner input = new Scanner(System.in);
         int u = Integer.parseInt(input.nextLine());
@@ -252,7 +296,7 @@ public class Graph
         chooseAction(this);
     }
 
-    public static void chooseAction(Graph g) throws Exception
+    public static void chooseAction(IndividualProject g) throws Exception
     {
         printMenu();
         System.out.printf("Please specify an action: ");
@@ -293,6 +337,7 @@ public class Graph
 
     public void findSpanningTree() throws Exception
     {
+        IndividualProject temp = this;
         if (this.adj.isEmpty())
         {
             System.out.println("The graph is not loaded yet.");
@@ -302,20 +347,26 @@ public class Graph
         System.out.print("Please specify a root: ");
         Scanner input = new Scanner(System.in);
         int root = Integer.parseInt(input.nextLine());
-        Graph a = findSpanningTree(root);
+        IndividualProject a = findSpanningTree(root);
         if (a == null)
         {
             System.out.println("Spanning tree cannot be found because the graph is not connected.");
         }
         else
         {
-            a.printGraph();
+            a.printGraph(a);
         }
-        chooseAction(this);
+        chooseAction(temp);
     }
 
     public void saveGraph() throws Exception
     {
+        if (this.adj.isEmpty())
+        {
+            System.out.println("The graph is not loaded yet.");
+            chooseAction(this);
+            return;
+        }
         System.out.print("Where to save the adjacency list of the current graph? ");
         Scanner input = new Scanner(System.in);
         String filename = input.nextLine();
@@ -329,7 +380,7 @@ public class Graph
         try
         {
             String filepath = "graph.txt";
-            Graph g = new Graph(filepath);
+            IndividualProject g = new IndividualProject(filepath);
             int v = g.getV();
             int e = g.getE();
             System.out.println("#vertex: " + v + " #edge: " + e);
@@ -338,7 +389,7 @@ public class Graph
         } catch (Exception e)
         {
             e.printStackTrace();
-            Graph g = new Graph();
+            IndividualProject g = new IndividualProject();
             chooseAction(g);
         }
     }
@@ -347,7 +398,7 @@ public class Graph
     public static void main(String[] args) throws Exception
     {
         System.out.println("Welcome to this social network analysis system.");
-        Graph g = new Graph();
+        IndividualProject g = new IndividualProject();
         chooseAction(g);
     }
 }
