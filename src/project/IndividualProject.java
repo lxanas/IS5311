@@ -388,7 +388,9 @@ public class IndividualProject
             chooseAction(g);
         } catch (Exception e)
         {
+            System.out.println("Error on loading graph from file");
             e.printStackTrace();
+            Thread.sleep(100);
             IndividualProject g = new IndividualProject();
             chooseAction(g);
         }
